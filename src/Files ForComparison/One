@@ -1,0 +1,75 @@
+updateUser: {
+      type: UserType,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLID)
+        },
+        name: {
+          type: GraphQLString
+        },
+        email: {
+          type: GraphQLString
+        },
+        age: {
+          type: GraphQLInt
+        }
+      },
+      resolve(parent, args) {
+        if (!args.id) throw new Error("User id not provided");
+        return new Promise((resolve, reject) => {
+          if (args.name) {
+            User.findByIdAndUpdate(
+              {
+                _id: args.id
+              },
+              {
+                $set: {
+                  name: args.name // make the change
+                }
+              },
+              {
+                new: true // This makes sure the return result is the updated information
+                // museFindAndModify: false // Prevents error in console. DOESN'T WORK IN TS
+              }
+            );
+          }
+
+          if (args.email) {
+            User.findByIdAndUpdate(
+              {
+                _id: args.id
+              },
+              {
+                $set: {
+                  email: args.email // make the change
+                }
+              },
+              {
+                new: true // This makes sure the return result is the updated information
+                // museFindAndModify: false // Prevents error in console. DOESN'T WORK IN TS
+              }
+            );
+          } 
+          
+          if (args.age) {
+            User.findByIdAndUpdate(
+              {
+                _id: args.id
+              },
+              {
+                $set: {
+                  age: args.age // make the change
+                }
+              },
+              {
+                new: true // This makes sure the return result is the updated information
+                // museFindAndModify: false // Prevents error in console. DOESN'T WORK IN TS
+              }
+            );
+          } 
+
+          if (!args.name && !args.email && !args.age) throw new Error("No change specified");
+          return User.findById(args.id);
+        });
+      }
+    },
